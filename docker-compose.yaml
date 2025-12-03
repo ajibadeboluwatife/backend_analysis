@@ -1,0 +1,80 @@
+name: backend-professional
+services:
+  web:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: web
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+    networks:
+      - oracle-network
+    env_file:
+      - ./frontend/.env
+
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: api
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./backend/.env
+    volumes:
+      - ./backend/app:/app/app
+      - app_data:/app_data
+    depends_on:
+      - qdrant
+      - ollama
+    networks:
+      - oracle-network
+
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: qdrant
+    restart: unless-stopped
+    ports:
+      - "6333:6333"
+    volumes:
+      - qdrant_data:/qdrant/storage
+    networks:
+      - oracle-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:6333/health"]
+      interval: 10s
+      timeout: 10s
+      retries: 10
+      start_period: 90s
+
+  ollama:
+    build:
+      context: ./ollama
+      dockerfile: Dockerfile
+    container_name: ollama
+    restart: unless-stopped
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    networks:
+      - oracle-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:11434/api/tags"]
+      interval: 10s
+      timeout: 10s
+      retries: 10
+      start_period: 120s
+
+volumes:
+  app_data:
+  qdrant_data:
+  ollama_data:
+
+networks:
+  oracle-network:
+    driver: bridge
