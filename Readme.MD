@@ -21,6 +21,41 @@ Backend professional a specialized retrieval-augmented generation (RAG) system d
 - **[Frontend Documentation](./frontend/README.md)** - React UI, API client, and Docker setup
 
 
+## Quick Start
+
+### Using Docker Compose (Recommended)
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/ajibadeboluwatife/backend_professional.git
+   cd backend_professional
+   ```
+
+2. **Create environment files:**
+   ```bash
+   cp backend/.env.example backend/.env
+   cp frontend/.env.example frontend/.env
+   ```
+
+3. **Start all services:**
+   ```bash
+   make build
+   # or: docker compose up --build
+   ```
+
+4. **Access the application:**
+   - Frontend: http://localhost:3000
+   - Backend API: http://localhost:8000
+   - API Docs: http://localhost:8000/docs
+   - Qdrant: http://localhost:6333/dashboard
+
+### Manual Setup
+
+See individual documentation:
+- [Backend Setup](./backend/README.md#setup)
+- [Frontend Setup](./frontend/README.md#setup)
+
+
 ### Prerequisites
 
 - Python 3.12+
