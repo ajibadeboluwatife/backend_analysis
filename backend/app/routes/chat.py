@@ -13,13 +13,20 @@ settings = get_settings()
 logger = get_logger(__name__)
 router = APIRouter()
 
+# Common greetings to detect casual conversation
+GREETINGS = [
+    "hello", "hi", "hey", "how are you", "good morning", 
+    "good afternoon", "good evening", "what's up", "sup"
+]
+
 
 def is_greeting(question: str) -> bool:
     """Check if the question appears to be a greeting."""
-    greetings = ["hello", "hi", "hey", "how are you", "good morning", "good afternoon", "good evening", "what's up", "sup"]
     question_lower = question.lower().strip()
     # Check for exact greeting words or very short casual greetings
-    return any(greet in question_lower for greet in greetings) or (len(question.split()) <= 3 and question_lower in ["hi", "hello", "hey", "yo"])
+    return any(greet in question_lower for greet in GREETINGS) or (
+        len(question.split()) <= 3 and question_lower in ["hi", "hello", "hey", "yo"]
+    )
 
 
 @router.post("/chat")
@@ -65,7 +72,6 @@ async def chat(request: ChatRequest, raw_request: Request = None):
     }
 
     async with httpx.AsyncClient() as client:
-        
         response = await client.post(
             f"{settings.OLLAMA_BASE_URL}/api/chat",
                json=payload,
