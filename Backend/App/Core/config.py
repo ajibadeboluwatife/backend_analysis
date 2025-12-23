@@ -1,4 +1,4 @@
-"""Backend Oracle Application Configurations."""
+"""Backend Professional Application Configurations."""
 
 import os
 from functools import lru_cache
@@ -14,7 +14,7 @@ class Settings(BaseSettings):
 
     APP_API_PREFIX: str = "/api/v1"
     APP_DESCRIPTION: str = "Coding Assistant for Backend Developers"
-    APP_NAME: str = "Backend Oracle"
+    APP_NAME: str = "Backend Professional"
     APP_VERSION: str = "1.0.0"
     DEBUG: bool = False
 
